@@ -1,0 +1,1 @@
+program HelloWorld begin x:=10;y:=-8;if(x>y)thenx:=y;while(x+y)>6dox:=y+1;read(x,y);write(10,y/10)end
