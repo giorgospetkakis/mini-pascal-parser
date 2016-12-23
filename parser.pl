@@ -1,7 +1,10 @@
 #!/usr/bin/perl
+use strict;
+use warnings;
 
 open (INF, "<", $ARGV[0]) or die "couldn't open sourcecode\n";
 
+my $in_buffer;
 # these lines of code slurp the whole file into one scalar $in_buffer
 {
     local $/;
@@ -18,6 +21,7 @@ my @reservedNoSpace = < 'program' 'begin' 'end'>;
 my @reservedAllowSpace = < 'read' 'write' 'if' 'then' 'else' 'while' 'do' >;
 my @charTerm = < ';' ':=' '(' ',' ')' '+' '-' '/' '=' '<>' '<=' '>=' '\>' '\<' >;
 my $star = "\*";
+
 my $token;
 my $lineCount = 1;
 
@@ -43,6 +47,14 @@ sub lex()
     {
         $token = "";
         return;
+    }
+
+    # Check for comments
+    if ($token eq '(\*') {
+        while ($token ne '*)')
+        {
+            lex();
+        }
     }
 
     # Check for reserved words that don't allow spaces
